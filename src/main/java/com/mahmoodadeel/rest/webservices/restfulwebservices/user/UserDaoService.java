@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 public class UserDaoService {	
 	
 	private static List<User> users = new ArrayList<>();
-	
+	private static int usersCount = 0;
 	static {
-		users.add(new User(1, "Amjad", LocalDate.now().minusYears(30)));
-		users.add(new User(2, "Akram", LocalDate.now().minusYears(23)));
-		users.add(new User(3, "Alina", LocalDate.now().minusYears(19)));
+		users.add(new User(++usersCount, "Amjad", LocalDate.now().minusYears(30)));
+		users.add(new User(++usersCount, "Akram", LocalDate.now().minusYears(23)));
+		users.add(new User(++usersCount, "Alina", LocalDate.now().minusYears(19)));
 	}
 	public List<User> findAll(){
 		return users;
@@ -26,6 +26,12 @@ public class UserDaoService {
 	public User findOne(int id) {
 		Predicate<? super User> predicate =user -> Integer.valueOf(user.getId()).equals(id);
 		return users.stream().filter(predicate).findFirst().get();
+	}
+	
+	public User save(User user) {
+		user.setId(++usersCount);
+		users.add(user);
+		return user;
 	}
 }
 
